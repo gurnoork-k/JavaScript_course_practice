@@ -18,7 +18,7 @@ class Product{
   priceCents;
 
   //automatically will run this constructor
-  constructor(productDetails){
+  constructor(productDetails){  
     this.id = productDetails.id;
     this.image = productDetails.image;
     this.name = productDetails.name;
@@ -767,5 +767,3 @@ export function loadProducts(fun){
   xhr.open('GET', 'https://supersimplebackend.dev/products');
   xhr.send();
 }
-
-loadProducts();
