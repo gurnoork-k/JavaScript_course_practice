@@ -11,6 +11,11 @@ export function renderOrderSummary() {
   cart.forEach((eachItem) => {
     const productId = eachItem.productId;
     const matchingProduct = getProduct(productId);
+      if (!matchingProduct) {  // ← guard
+        console.warn('Product not found for id:', productId);
+        return; // skip this cart item
+      }
+
     const deliveryOptionId = eachItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
