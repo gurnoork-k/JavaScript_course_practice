@@ -33,6 +33,28 @@ class Product{
   getPrice(){
     return `$${formatCurrency(this.priceCents)}`;
   }
+
+  extraInfoHTML(){
+    return ``;
+  }
+}
+
+class Clothing extends Product{
+  sizeChartLink;
+  constructor(productDetails){
+    super(productDetails);
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  
+  extraInfoHTML(){
+    //super.extraInfoHTML();
+    return `
+    <a href="${this.sizeChartLink}" target="_blank">
+      Size Chart
+    </a>
+    `
+  }
 }
 
 export const products = [
@@ -695,5 +717,33 @@ export const products = [
     ]
   }
 ].map((productDetails)=>{
+  if(productDetails.type=== 'clothing'){
+    return new Clothing(productDetails);
+  }
   return new Product(productDetails);
 });
+
+/*
+LEARNT MORE ABOUT CLASSES
+function logThis(){
+  console.log(this);
+}
+logThis()
+logThis.call('helo')
+
+const obj3 = {
+  method: ()=>{
+    console.log(this);
+
+  [1,2,3].forEach(()=>{
+    console.log(this);
+  });
+  }
+}
+//arrow functions do not change the value of 'this' but reg funcs do
+//both this points to obj3
+
+//'this' -we can change 'this' to wtv we want using 'call()'
+//inside a regular function 'this' becomes undefined
+*/
+
