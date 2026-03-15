@@ -1,13 +1,8 @@
-/*STEPS
--we saved the data into js as objects (in array)
--we generated the html
--we put all the dynamic html onto the web page so that we can interact with it*/
-
-//generate the html 2nd
-import {cart} from '../data/cart.js'; //dont have to worry about the order of files
+import {cart, addToCart, updateCartQuantity} from '../data/cart.js';
 import {products} from '../data/products.js';
+import { formatCurrency } from './utils/money.js';
 
-let productHTML = ''; //combining all the html into one variable
+let productHTML = '';
 products.forEach((product) => {
   productHTML += `
     <div class="product-container">
@@ -21,14 +16,14 @@ products.forEach((product) => {
 
       <div class="product-rating-container">
         <img class="product-rating-stars"
-          src="images/ratings/rating-${product.rating.stars * 10}.png">
+          src="${product.getStarsUrl()}">
         <div class="product-rating-count link-primary">
           ${product.rating.count} 
         </div>
       </div>
 
       <div class="product-price">
-        ${(product.priceCents/100).toFixed(2)}
+        ${product.getPrice()}
       </div>
 
       <div class="product-quantity-container">
@@ -59,45 +54,19 @@ products.forEach((product) => {
       </button>
     </div>
   `
-})
-//data-product-name --> data attribute (starts with data followed by any name of our choice) 
-
-console.log(productHTML);
+});
 
 //last step is to put all the html onto the page
 document.querySelector('.js-products-grid').innerHTML = productHTML;
 
+updateCartQuantity();
+
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', ()=>{
-      const productId = button.dataset.productId; //gives all the data attributes attached to elements
-
-      let matchingItem;
-      
-      cart.forEach((item) => {
-        if(productId === item.productId){
-          matchingItem = item;
-        }
-      })
-      if(matchingItem){
-        matchingItem.quantity +=1;
-      } else{
-        cart.push({
-          productId: productId,
-          quantity: 1
-        });
-      }
-
-      let cartQuantity = 0;
-      cart.forEach((item) => {
-        cartQuantity += item.quantity;
-      })
-
-      document.querySelector('.js-cart-quantity')
-        .innerHTML = cartQuantity;
-
-      console.log(cartQuantity);
-      console.log(cart); 
+      const productId = button.dataset.productId;
+      addToCart(productId);
+      updateCartQuantity();
     });
   });
 
